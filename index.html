@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💖 두근두근 인연 연구소 💖</title>
+
+<style>
+body{
+    font-family: "Malgun Gothic", sans-serif;
+    background: linear-gradient(135deg,#ff9ad5,#d8a8ff);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:0;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.container{
+    background:white;
+    width:90%;
+    max-width:500px;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    text-align:center;
+    box-sizing: border-box;
+}
+
+h1{
+    color:#ff4fa3;
+    font-size: 26px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:2px solid #ffc1e3;
+    border-radius:10px;
+    font-size:16px;
+    box-sizing: border-box;
+}
+
+button{
+    background:#ff4fa3;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+
+button:hover{
+    background: #e03b8b;
+}
+
+#result{
+    margin-top:25px;
+    text-align:left;
+}
+
+.score{
+    font-size:40px;
+    font-weight:bold;
+    color:#ff4fa3;
+}
+
+/* 🌟 스르륵 나타나는 애니메이션이 적용된 카드 스타일 */
+.card{
+    background:#fff5fb;
+    padding:15px;
+    border-radius:12px;
+    margin-top:15px;
+    opacity: 0; /* 처음에 투명하게 시작 */
+    animation: fadeInUp 0.6s ease-out forwards; /* 0.6초 동안 페이드인 부드럽게 작동 */
+}
+
+/* 각각의 카드들이 시간차를 두고 순서대로 나타나도록 설정 */
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.3s; }
+.card:nth-child(3) { animation-delay: 0.5s; }
+.card:nth-child(4) { animation-delay: 0.7s; }
+
+/* 🌟 부드러운 애니메이션 키프레임 정의 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px); /* 약간 아래에서 */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* 제자리로 슬라이드 */
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>💖 두근두근 인연 연구소 💖</h1>
+
+<input id="name1" placeholder="이름 입력">
+<input id="name2" placeholder="이름 입력">
+
+<br>
+
+<button onclick="calculateLove()">궁합 분석하기</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+// ======== 특별 지정 커플 ========
+const fixedCouples = {
+    "장예영|정해성":97,
+    "김서환|이수아":95,
+    "김세빈|김우솔":93,
+    "인예인|이우석":91
+};
+
+// ======== 이름 정렬 ========
+function makeKey(a,b){
+    return [a,b].sort().join("|");
+}
+
+// ======== 고정 결과 및 제한 조건 확인 ========
+function getLoveScore(name1, name2){
+    const key = makeKey(name1, name2);
+    let score = 0;
+
+    if(fixedCouples[key] !== undefined){
+        score = fixedCouples[key];
+    } else {
+        let text = key;
+        let sum = 0;
+        for(let i=0; i<text.length; i++){
+            sum += text.charCodeAt(i);
+        }
+        score = (sum * 7) % 101;
+    }
+
+    // 장예영 예외 처리 차단 락
+    if ((name1 === "장예영" && name2 !== "정해성") || (name2 === "장예영" && name1 !== "정해성")) {
+        if (score > 60) {
+            score = (score % 21) + 40; 
+        }
+    }
+
+    return score;
+}
+
+// ======== 등급 ========
+function getGrade(score){
+    if(score >= 90) return "💍 천생연분";
+    if(score >= 70) return "💕 최고의 커플";
+    if(score >= 50) return "😊 좋은 인연";
+    if(score >= 30) return "🤝 친구형 궁합";
+
+    return "💔 노력 필요";
+}
+
+// ======== 분석문 ========
+function getAnalysis(score){
+    if(score >= 90){
+        return "두 사람의 이름 에너지 흐름이 매우 안정적으로 나타났습니다. 서로의 부족한 부분을 자연스럽게 채워주는 관계로 분석됩니다.";
+    }
+    if(score >= 70){
+        return "감정선과 대화 궁합이 좋은 편으로 나타났습니다. 서로에게 긍정적인 영향을 줄 수 있는 관계입니다.";
+    }
+    if(score >= 50){
+        return "적당한 조화가 발견됩니다. 노력에 따라 더욱 좋은 관계로 발전할 가능성이 있습니다.";
+    }
+    if(score >= 30){
+        return "성향 차이가 일부 존재합니다. 서로를 이해하려는 노력이 중요하게 작용할 수 있습니다.";
+    }
+
+    return "이름 에너지의 방향성이 다르게 나타납니다. 충분한 이해와 배려가 필요할 수 있습니다.";
+}
+
+// ======== 세부 수치 ========
+function makeSubScore(base, offset){
+    let score = base + offset;
+
+    if(score > 100) score = 100;
+    if(score < 0) score = 0;
+
+    return score;
+}
+
+// ======== 실행 ========
+function calculateLove(){
+    const name1 = document.getElementById("name1").value.trim();
+    const name2 = document.getElementById("name2").value.trim();
+
+    if(!name1 || !name2){
+        alert("이름을 모두 입력해주세요.");
+        return;
+    }
+
+    const score = getLoveScore(name1, name2);
+
+    const talk = makeSubScore(score, 8);
+    const emotion = makeSubScore(score, -5);
+    const trust = makeSubScore(score, 4);
+    const destiny = makeSubScore(score, 12);
+
+    let effect = "";
+
+    if(score >= 90){
+        effect = "❤️💕💖✨🌹";
+    }else if(score >= 70){
+        effect = "💕💖✨";
+    }else if(score >= 50){
+        effect = "😊💞";
+    }else{
+        effect = "💔😢";
+    }
+
+    // 각각의 카드가 0.2초 간격의 시차(delay)를 두고 출력되도록 애니메이션 효과 부여
+    document.getElementById("result").innerHTML = `
+        <div class="card" style="text-align:center;">
+            <h2>${name1} ❤️ ${name2}</h2>
+            <div class="score">${score}%</div>
+            <h3>${getGrade(score)}</h3>
+            <p>${effect}</p>
+        </div>
+
+        <div class="card">
+            <h3>📊 AI 분석 리포트</h3>
+            <p>${getAnalysis(score)}</p>
+            <p style="font-size:12px; color:#888;">
+            이 분석은 이름의 글자 구조, 초성 조화도, 음절 균형도, 감정 에너지 흐름을 기반으로 계산되었습니다.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>💡 세부 분석</h3>
+            <p>🗣️ 대화 궁합 : ${talk}%</p>
+            <p>💓 감정 궁합 : ${emotion}%</p>
+            <p>🤝 신뢰도 : ${trust}%</p>
+            <p>🌟 운명 지수 : ${destiny}%</p>
+        </div>
+
+        <div class="card" style="text-align:center;">
+            <small style="color:#999;">
+            본 서비스는 재미를 위한 콘텐츠이며 실제 관계를 판단하는 기준이 아닙니다.
+            </small>
+        </div>
+    `;
+}
+</script>
+
+</body>
+</html>
+    
+  </body>
+  
+</html>
